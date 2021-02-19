@@ -1,0 +1,60 @@
+pipeline {
+          agent {
+              label 'master'
+          }
+          tools {
+              maven 'maven3'
+              jdk 'java1.8'
+
+          }
+          stages {
+            stage ('Code Checkout') {
+              steps{
+                  git credentialsId: 'devopstrainer', branch: 'master', url: 'https://github.com/Divija-Naidu/addressbook.git'
+
+              }
+            }
+            stage('Code Validate') {
+                steps{
+                    script {
+                        sh"""
+                        mvn validate
+                        """
+                         }
+                }
+
+}
+
+            stage('Code Compile') {
+                steps{
+                    script {
+                        sh"""
+                        mvn compile
+                        """
+                         }
+                }
+
+}
+            stage('Code Test') {
+                steps{
+                    script {
+                        sh"""
+                        mvn test
+                        """
+                         }
+                }
+                
+}
+
+            stage('Package') {
+                steps{
+                    script {
+                        sh"""
+                        mvn package
+                        """
+                         }
+                }              
+                 
+}
+          }
+}
